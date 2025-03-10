@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -56,6 +57,56 @@ public class LivroManager {
         session.beginTransaction();
         session.save(livro);
         session.getTransaction().commit();
+        session.close();
+    }
+
+    public void delete(){
+        Livro livro = new Livro();
+        livro.setCodigo(1);
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.delete(livro);
+        session.getTransaction().commit();
+    }
+    public void update() {
+        Livro livro = new Livro();
+        livro.setCodigo(2);
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.update(livro);
+        session.getTransaction().commit();
+        session.close();
+    }
+    public void readLivrobyAutores() {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction(); // Inicia a transação
+
+        Query query = session.createNamedQuery("Livro.findLivroByAutor");
+        query.setParameter("nome", "Joao");
+        List<Livro> livros = query.list();
+
+        session.getTransaction().commit(); // Finaliza a transação
+
+        System.out.println("livro por autor ---------");
+        for (Livro livro : livros) {
+            System.out.println(livro);
+        }
+        session.close();
+    }
+    public void readLivrobyEditora() {
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction(); // Inicia a transação
+
+        Query query = session.createNamedQuery("Livro.findLivroByEditora");
+        query.setParameter("nome", "Pearson");
+        List<Livro> livros = query.list();
+
+        session.getTransaction().commit(); // Finaliza a transação
+
+        System.out.println("livro por editora ---------");
+        for (Livro livro : livros) {
+            System.out.println(livro);
+        }
         session.close();
     }
 }

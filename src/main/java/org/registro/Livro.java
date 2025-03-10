@@ -8,6 +8,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
+@NamedQuery(name = "Livro.findAutoresByTitulo", query = "SELECT a FROM Livro l JOIN l.autores a WHERE l.titulo = :titulo")
+@NamedQuery(name = "Livro.findLivroByAutor", query = "SELECT l FROM Livro l JOIN FETCH l.autores a WHERE a.nome = :nome")
+@NamedQuery(name = "Livro.findEditoraByTitulo", query = "SELECT e FROM Livro l JOIN l.editora e WHERE l.titulo = :titulo")
+@NamedQuery(name = "Livro.findLivroByEditora", query = "SELECT DISTINCT l FROM Livro l left JOIN FETCH l.editora e LEFT JOIN FETCH l.autores WHERE e.nome = :nome")
+@NamedQuery(name = "Livro.findEditoraByAutor", query = "SELECT e FROM Livro l JOIN  l.editora e JOIN l.autores a WHERE a.nome = :nome")
+@NamedQuery(name = "Livro.findAutorByEditora", query = "SELECT a FROM Livro l JOIN  l.editora e JOIN l.autores a WHERE e.nome = :nome")
+
 @Table(name = "livro")
 public class Livro implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -28,7 +35,7 @@ public class Livro implements Serializable {
     private LocalDate lancamento;
 
     @Basic
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "editora_id")
     private Editora editora;
 
